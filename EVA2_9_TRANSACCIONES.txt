@@ -1,0 +1,389 @@
+MySQL Shell 8.0.46
+
+Copyright (c) 2016, 2026, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost':
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching schema names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 18
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  JS > \sql
+Switching to SQL mode... Commands end with ;
+Fetching global names for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306  SQL > create role 'supervisor';
+Query OK, 0 rows affected (0.0042 sec)
+ MySQL  localhost:3306  SQL > show databases
+                           -> ;
++--------------------+
+| Database           |
++--------------------+
+| academiaavanza     |
+| information_schema |
+| mysql              |
+| northwind          |
+| performance_schema |
+| phpmyadmin         |
+| sakila             |
+| t1_copia           |
+| t2                 |
+| tbd1               |
+| tbd_exa1           |
+| test               |
+| tutoria            |
+| world              |
++--------------------+
+14 rows in set (0.0009 sec)
+ MySQL  localhost:3306  SQL > use tbd1;
+Default schema set to `tbd1`.
+Fetching global names, object names from `tbd1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306  tbd1  SQL > show tables
+                                 -> ;
++--------------------+
+| Tables_in_tbd1     |
++--------------------+
+| actor              |
+| copia_persona      |
+| customer           |
+| empleado           |
+| matricula          |
+| persona            |
+| persona_modificada |
+| playera            |
+| vehiculo           |
+| vehiculo2          |
++--------------------+
+10 rows in set (0.0007 sec)
+ MySQL  localhost:3306  tbd1  SQL > grant select on tbd1.actor to 'supervisor';
+Query OK, 0 rows affected (0.0021 sec)
+ MySQL  localhost:3306  tbd1  SQL > create user 'usuario_rol'@'localhost' identified by '2323';
+Query OK, 0 rows affected (0.0016 sec)
+ MySQL  localhost:3306  tbd1  SQL > grant 'supervisor' to 'usuario_rol'@'localhost';
+Query OK, 0 rows affected (0.0016 sec)
+ MySQL  localhost:3306  tbd1  SQL > \disconnect
+ MySQL  SQL > \connect usuario_rol@localhost;
+Creating a session to 'usuario_rol@localhost;'
+Please provide the password for 'usuario_rol@localhost;': ****
+MySQL Error 2005: No such host is known 'localhost;'
+ MySQL  SQL > \connect usuario_rol@localhost
+Creating a session to 'usuario_rol@localhost'
+Please provide the password for 'usuario_rol@localhost': ****
+Save password for 'usuario_rol@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 19
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  SQL >
+ MySQL  localhost:3306  SQL >
+ MySQL  localhost:3306  SQL >
+ MySQL  localhost:3306  SQL > show databases<,
+                           -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '<,' at line 1
+ MySQL  localhost:3306  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| test               |
++--------------------+
+2 rows in set (0.0007 sec)
+ MySQL  localhost:3306  SQL > \disconnect;
+Unknown command: '\disconnect;'
+ MySQL  localhost:3306  SQL > \disconnect
+ MySQL  SQL > \connect --mc usuario_rol@localhost
+Creating a Classic session to 'usuario_rol@localhost'
+Please provide the password for 'usuario_rol@localhost': ****
+Save password for 'usuario_rol@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 20
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| test               |
++--------------------+
+2 rows in set (0.0008 sec)
+ MySQL  localhost:3306  SQL > use tbd1;
+MySQL Error 1044: Access denied for user 'usuario_rol'@'localhost' to database 'tbd1'
+ MySQL  localhost:3306  SQL > \disconnect;
+Unknown command: '\disconnect;'
+ MySQL  localhost:3306  SQL > \disconnect
+ MySQL  SQL > grant select on tbd1.actor to 'supervisor'@'localhost';
+ERROR: Not connected.
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost':
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 21
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  SQL >
+ MySQL  localhost:3306  SQL > grant select on tbd1.actor to 'supervisor'@'localhost';
+Query OK, 0 rows affected (0.0012 sec)
+ MySQL  localhost:3306  SQL > create user 'usuario_rol2'@'localhost';
+Query OK, 0 rows affected (0.0016 sec)
+ MySQL  localhost:3306  SQL > grant 'supervisor'@'localhost' to 'usuario_rol2'@'localhost';
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '@'localhost' to 'usuario_rol2'@'localhost'' at line 1
+ MySQL  localhost:3306  SQL > -- 1. Le das el permiso al ROL directamente
+Query OK, 0 rows affected (0.0003 sec)
+ MySQL  localhost:3306  SQL > GRANT SELECT ON tbd1.actor TO 'supervisor';
+Query OK, 0 rows affected (0.0016 sec)
+ MySQL  localhost:3306  SQL >
+ MySQL  localhost:3306  SQL > -- 2. Le asignas el ROL a tu USUARIO
+Query OK, 0 rows affected (0.0001 sec)
+ MySQL  localhost:3306  SQL > GRANT 'supervisor' TO 'usuario_rol2'@'localhost';
+Query OK, 0 rows affected (0.0019 sec)
+ MySQL  localhost:3306  SQL > set global activate_all_roles_on_login = ON;
+ERROR: 1193 (HY000): Unknown system variable 'activate_all_roles_on_login'
+ MySQL  localhost:3306  SQL > SET DEFAULT ROLE 'supervisor' FOR 'usuario_rol2'@'localhost';
+Query OK, 0 rows affected (0.0018 sec)
+ MySQL  localhost:3306  SQL > \DISCONNECT
+Unknown command: '\DISCONNECT'
+ MySQL  localhost:3306  SQL > \disconnect
+ MySQL  SQL > \connect --mc usuario_rol2@localhost
+Creating a Classic session to 'usuario_rol2@localhost'
+Please provide the password for 'usuario_rol2@localhost': ****
+MySQL Error 1045 (28000): Access denied for user 'usuario_rol2'@'localhost' (using password: YES)
+ MySQL  SQL >
+ MySQL  SQL > \connect --mc usuario_rol2@localhost
+Creating a Classic session to 'usuario_rol2@localhost'
+Please provide the password for 'usuario_rol2@localhost':
+Save password for 'usuario_rol2@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 23
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| tbd1               |
+| test               |
++--------------------+
+3 rows in set (0.0008 sec)
+ MySQL  localhost:3306  SQL > \disconnect
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost':
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 24
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| academiaavanza     |
+| information_schema |
+| mysql              |
+| northwind          |
+| performance_schema |
+| phpmyadmin         |
+| sakila             |
+| t1_copia           |
+| t2                 |
+| tbd1               |
+| tbd_exa1           |
+| test               |
+| tutoria            |
+| world              |
++--------------------+
+14 rows in set (0.0011 sec)
+ MySQL  localhost:3306  SQL > use tbd1;
+Default schema set to `tbd1`.
+Fetching global names, object names from `tbd1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306  tbd1  SQL > use t2;
+Default schema set to `t2`.
+Fetching global names, object names from `t2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306  t2  SQL > show tables;
++---------------+
+| Tables_in_t2  |
++---------------+
+| carrera       |
+| cliente       |
+| comida        |
+| estudiante    |
+| producto      |
+| tablaa        |
+| tablab        |
+| venta         |
+| venta_detalle |
++---------------+
+9 rows in set (0.0007 sec)
+ MySQL  localhost:3306  t2  SQL > desc venta;
++-------------+---------+------+-----+---------+----------------+
+| Field       | Type    | Null | Key | Default | Extra          |
++-------------+---------+------+-----+---------+----------------+
+| id_venta    | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_cliente  | int(11) | NO   | MUL | NULL    |                |
+| fecha_venta | date    | YES  |     | NULL    |                |
++-------------+---------+------+-----+---------+----------------+
+3 rows in set (0.0288 sec)
+ MySQL  localhost:3306  t2  SQL > select * from venta;
++----------+------------+-------------+
+| id_venta | id_cliente | fecha_venta |
++----------+------------+-------------+
+|        3 |          3 | 2025-01-01  |
+|        4 |          4 | 2024-02-02  |
++----------+------------+-------------+
+2 rows in set (0.0006 sec)
+ MySQL  localhost:3306  t2  SQL > select * from producto;
++-------------+---------+--------+--------+
+| id_producto | nombre  | precio | unidad |
++-------------+---------+--------+--------+
+|           1 | palyera |    500 | pieza  |
+|           3 | papos   |   1500 | par    |
++-------------+---------+--------+--------+
+2 rows in set (0.0012 sec)
+ MySQL  localhost:3306  t2  SQL > slecet * from cliente;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'slecet * from cliente' at line 1
+ MySQL  localhost:3306  t2  SQL > select * from cliente;
++------------+--------------+-----------+------------+
+| id_cliente | nombre       | apellidos | fecha_nac  |
++------------+--------------+-----------+------------+
+|          3 | nuevo_nombre | bernal    | 0000-00-00 |
+|          4 | arana        | larana    | 0000-00-00 |
+|          5 | JAVIVI       | LOYAL     | 0000-00-00 |
+|          6 | pedro        | bernal    | 0000-00-00 |
+|          7 | arana        | larana    | 0000-00-00 |
++------------+--------------+-----------+------------+
+5 rows in set (0.0050 sec)
+ MySQL  localhost:3306  t2  SQL > select * from venta_det;
+ERROR: 1146 (42S02): Table 't2.venta_det' doesn't exist
+ MySQL  localhost:3306  t2  SQL > select * from venta_detalle;
++--------------+----------+-------------+----------+
+| id_venta_det | id_venta | id_producto | cantidad |
++--------------+----------+-------------+----------+
+|            7 |        4 |           1 |        2 |
++--------------+----------+-------------+----------+
+1 row in set (0.0018 sec)
+ MySQL  localhost:3306  t2  SQL > insert into venta(id_cliente, fecha_venta)
+                               -> value(5, '2026-11-05');
+Query OK, 1 row affected (0.0041 sec)
+ MySQL  localhost:3306  t2  SQL > select * from venta;
++----------+------------+-------------+
+| id_venta | id_cliente | fecha_venta |
++----------+------------+-------------+
+|        3 |          3 | 2025-01-01  |
+|        4 |          4 | 2024-02-02  |
+|        5 |          5 | 2026-11-05  |
++----------+------------+-------------+
+3 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > select * from venta_detalle;
++--------------+----------+-------------+----------+
+| id_venta_det | id_venta | id_producto | cantidad |
++--------------+----------+-------------+----------+
+|            7 |        4 |           1 |        2 |
++--------------+----------+-------------+----------+
+1 row in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > select * from venta_detalle
+                               -> where id_venta = 7;
+Empty set (0.0013 sec)
+ MySQL  localhost:3306  t2  SQL > start transaction;
+Query OK, 0 rows affected (0.0002 sec)
+ MySQL  localhost:3306  t2  ★  SQL > insert into venta(id_cliente, fecha_venta)
+                                  -> value(4, '2026-11-05');
+Query OK, 1 row affected (0.0013 sec)
+ MySQL  localhost:3306  t2  ★  SQL > insert into venta_detalle(id_venta, id_producto, cantidad)
+                                  -> value(20, 3, 8);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`t2`.`venta_detalle`, CONSTRAINT`venta_detalle_ibfk_1` FOREIGN KEY (`id_venta`) REFERENCES `venta` (`id_venta`) ON DELETE CASCADE ON UPDATE CASCADE)
+ MySQL  localhost:3306  t2  ★  SQL > rollback;
+Query OK, 0 rows affected (0.0019 sec)
+ MySQL  localhost:3306  t2  SQL > select * from venta;
++----------+------------+-------------+
+| id_venta | id_cliente | fecha_venta |
++----------+------------+-------------+
+|        3 |          3 | 2025-01-01  |
+|        4 |          4 | 2024-02-02  |
+|        5 |          5 | 2026-11-05  |
++----------+------------+-------------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306  t2  SQL > start transaction;
+Query OK, 0 rows affected (0.0002 sec)
+ MySQL  localhost:3306  t2  ★  SQL > select * from clientes;
+ERROR: 1146 (42S02): Table 't2.clientes' doesn't exist
+ MySQL  localhost:3306  t2  ★  SQL > select * from cliente;
++------------+--------------+-----------+------------+
+| id_cliente | nombre       | apellidos | fecha_nac  |
++------------+--------------+-----------+------------+
+|          3 | nuevo_nombre | bernal    | 0000-00-00 |
+|          4 | arana        | larana    | 0000-00-00 |
+|          5 | JAVIVI       | LOYAL     | 0000-00-00 |
+|          6 | pedro        | bernal    | 0000-00-00 |
+|          7 | arana        | larana    | 0000-00-00 |
++------------+--------------+-----------+------------+
+5 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  ★  SQL > insert into cliente(nombre, apellidos, fecha_nac)
+                                  -> value('xxxx', 'xxxx', 'xxxx-xx-xx');
+Query OK, 1 row affected, 1 warning (0.0012 sec)
+Warning (code 1265): Data truncated for column 'fecha_nac' at row 1
+ MySQL  localhost:3306  t2  ★  SQL > select * from cliente;
++------------+--------------+-----------+------------+
+| id_cliente | nombre       | apellidos | fecha_nac  |
++------------+--------------+-----------+------------+
+|          3 | nuevo_nombre | bernal    | 0000-00-00 |
+|          4 | arana        | larana    | 0000-00-00 |
+|          5 | JAVIVI       | LOYAL     | 0000-00-00 |
+|          6 | pedro        | bernal    | 0000-00-00 |
+|          7 | arana        | larana    | 0000-00-00 |
+|          8 | xxxx         | xxxx      | 0000-00-00 |
++------------+--------------+-----------+------------+
+6 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  ★  SQL > commit;
+Query OK, 0 rows affected (0.0021 sec)
+ MySQL  localhost:3306  t2  SQL > start transaction;
+Query OK, 0 rows affected (0.0005 sec)
+ MySQL  localhost:3306  t2  ★  SQL > select * from cliente;
++------------+--------------+-----------+------------+
+| id_cliente | nombre       | apellidos | fecha_nac  |
++------------+--------------+-----------+------------+
+|          3 | nuevo_nombre | bernal    | 0000-00-00 |
+|          4 | arana        | larana    | 0000-00-00 |
+|          5 | JAVIVI       | LOYAL     | 0000-00-00 |
+|          6 | pedro        | bernal    | 0000-00-00 |
+|          7 | arana        | larana    | 0000-00-00 |
+|          8 | xxxx         | xxxx      | 0000-00-00 |
++------------+--------------+-----------+------------+
+6 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  ★  SQL > insert into cliente(nombre, apellidos, fecha_nac) value('xxxx', 'xxxx', 'xxxx-xx-xx');
+Query OK, 1 row affected, 1 warning (0.0011 sec)
+Warning (code 1265): Data truncated for column 'fecha_nac' at row 1
+ MySQL  localhost:3306  t2  ★  SQL > select * from cliente;
++------------+--------------+-----------+------------+
+| id_cliente | nombre       | apellidos | fecha_nac  |
++------------+--------------+-----------+------------+
+|          3 | nuevo_nombre | bernal    | 0000-00-00 |
+|          4 | arana        | larana    | 0000-00-00 |
+|          5 | JAVIVI       | LOYAL     | 0000-00-00 |
+|          6 | pedro        | bernal    | 0000-00-00 |
+|          7 | arana        | larana    | 0000-00-00 |
+|          8 | xxxx         | xxxx      | 0000-00-00 |
+|          9 | xxxx         | xxxx      | 0000-00-00 |
++------------+--------------+-----------+------------+
+7 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  ★  SQL > rollback;
+Query OK, 0 rows affected (0.0021 sec)
+ MySQL  localhost:3306  t2  SQL > select * from cliente;
++------------+--------------+-----------+------------+
+| id_cliente | nombre       | apellidos | fecha_nac  |
++------------+--------------+-----------+------------+
+|          3 | nuevo_nombre | bernal    | 0000-00-00 |
+|          4 | arana        | larana    | 0000-00-00 |
+|          5 | JAVIVI       | LOYAL     | 0000-00-00 |
+|          6 | pedro        | bernal    | 0000-00-00 |
+|          7 | arana        | larana    | 0000-00-00 |
+|          8 | xxxx         | xxxx      | 0000-00-00 |
++------------+--------------+-----------+------------+
+6 rows in set (0.0005 sec)
+ MySQL  localhost:3306  t2  SQL >
