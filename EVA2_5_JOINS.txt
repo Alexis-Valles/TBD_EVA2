@@ -1,0 +1,220 @@
+MySQL Shell 8.0.46
+
+Copyright (c) 2016, 2026, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost':
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 37
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  SQL > use t2;
+Default schema set to `t2`.
+Fetching global names, object names from `t2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306  t2  SQL > select *
+                               -> from venta a
+                               -> inner join cliente b
+                               ->     on a.id_cliente = b.id_cliente;
++----------+------------+-------------+------------+--------------+-----------+------------+
+| id_venta | id_cliente | fecha_venta | id_cliente | nombre       | apellidos | fecha_nac  |
++----------+------------+-------------+------------+--------------+-----------+------------+
+|        3 |          3 | 2025-01-01  |          3 | nuevo_nombre | bernal    | 0000-00-00 |
+|        4 |          4 | 2024-02-02  |          4 | arana        | larana    | 0000-00-00 |
+|        5 |          5 | 2026-11-05  |          5 | JAVIVI       | LOYAL     | 0000-00-00 |
++----------+------------+-------------+------------+--------------+-----------+------------+
+3 rows in set (0.0019 sec)
+ MySQL  localhost:3306  t2  SQL > select
+                               ->     a.id_cliente,
+                               ->     b.nombre,
+                               ->     b.apellidos,
+                               ->     a.id_venta,
+                               ->     a.fecha_venta
+                               -> from venta a
+                               -> inner join cliente b
+                               ->     on a.id_cliente = b.id_cliente;
++------------+--------------+-----------+----------+-------------+
+| id_cliente | nombre       | apellidos | id_venta | fecha_venta |
++------------+--------------+-----------+----------+-------------+
+|          3 | nuevo_nombre | bernal    |        3 | 2025-01-01  |
+|          4 | arana        | larana    |        4 | 2024-02-02  |
+|          5 | JAVIVI       | LOYAL     |        5 | 2026-11-05  |
++------------+--------------+-----------+----------+-------------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306  t2  SQL > select * from venta_detalle;
++------------------+----------+-------------+----------+
+| id_venta_detalle | id_venta | id_producto | cantidad |
++------------------+----------+-------------+----------+
+|                6 |        3 |           2 |        1 |
+|                7 |        5 |           1 |        1 |
+|                8 |        3 |           4 |        7 |
++------------------+----------+-------------+----------+
+3 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > select * from producto;
++-------------+----------+-------+--------+
+| id_producto | name     | price | unidad |
++-------------+----------+-------+--------+
+|           1 | Playera  |   500 | pieza  |
+|           2 | pantalon |   200 | pieza  |
+|           3 | short    |  1000 | gramos |
+|           4 | bolsas   |  5000 | oz     |
+|           5 | Playera  |   500 | pieza  |
+|           6 | pantalon |   200 | pieza  |
+|           7 | short    |  1000 | gramos |
+|           8 | bolsas   |  5000 | oz     |
++-------------+----------+-------+--------+
+8 rows in set (0.0005 sec)
+ MySQL  localhost:3306  t2  SQL > insert into producto (id_producto, name, price, unidad)
+                               -> values (3, 'Bermuda', 1456, 'Pieza');
+ERROR: 1062 (23000): Duplicate entry '3' for key 'PRIMARY'
+ MySQL  localhost:3306  t2  SQL > select * from producto;
++-------------+----------+-------+--------+
+| id_producto | name     | price | unidad |
++-------------+----------+-------+--------+
+|           1 | Playera  |   500 | pieza  |
+|           2 | pantalon |   200 | pieza  |
+|           3 | short    |  1000 | gramos |
+|           4 | bolsas   |  5000 | oz     |
+|           5 | Playera  |   500 | pieza  |
+|           6 | pantalon |   200 | pieza  |
+|           7 | short    |  1000 | gramos |
+|           8 | bolsas   |  5000 | oz     |
++-------------+----------+-------+--------+
+8 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > insert into producto (name, price, unidad) values ('Bermuda', 1456, 'Pieza');
+Query OK, 1 row affected (0.0021 sec)
+ MySQL  localhost:3306  t2  SQL > update producto
+                               -> set name = 'Bermuda', price = 1456, unidad = 'Pieza'
+                               -> where id_producto = 3;
+Query OK, 1 row affected (0.0024 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306  t2  SQL > select * from producto;
++-------------+----------+-------+--------+
+| id_producto | name     | price | unidad |
++-------------+----------+-------+--------+
+|           1 | Playera  |   500 | pieza  |
+|           2 | pantalon |   200 | pieza  |
+|           3 | Bermuda  |  1456 | Pieza  |
+|           4 | bolsas   |  5000 | oz     |
+|           5 | Playera  |   500 | pieza  |
+|           6 | pantalon |   200 | pieza  |
+|           7 | short    |  1000 | gramos |
+|           8 | bolsas   |  5000 | oz     |
+|           9 | Bermuda  |  1456 | Pieza  |
++-------------+----------+-------+--------+
+9 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > delete from producto where id_producto > 4;
+Query OK, 5 rows affected (0.0041 sec)
+ MySQL  localhost:3306  t2  SQL > select * from producto;
++-------------+----------+-------+--------+
+| id_producto | name     | price | unidad |
++-------------+----------+-------+--------+
+|           1 | Playera  |   500 | pieza  |
+|           2 | pantalon |   200 | pieza  |
+|           3 | Bermuda  |  1456 | Pieza  |
+|           4 | bolsas   |  5000 | oz     |
++-------------+----------+-------+--------+
+4 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > select
+                               ->     b.id_producto,
+                               ->     a.name,
+                               ->     a.price,
+                               ->     b.cantidad,
+                               ->     (a.price * b.cantidad) as total
+                               -> from producto a
+                               -> inner join venta_detalle b
+                               ->     on a.id_producto = b.id_producto;
++-------------+----------+-------+----------+-------+
+| id_producto | name     | price | cantidad | total |
++-------------+----------+-------+----------+-------+
+|           1 | Playera  |   500 |        1 |   500 |
+|           2 | pantalon |   200 |        1 |   200 |
+|           4 | bolsas   |  5000 |        7 | 35000 |
++-------------+----------+-------+----------+-------+
+3 rows in set (0.0006 sec)
+ MySQL  localhost:3306  t2  SQL > select
+                               ->     b.id_producto,
+                               ->     a.name,
+                               ->     a.price,
+                               ->     b.cantidad,
+                               ->     (a.price * b.cantidad) as total
+                               -> from producto a
+                               -> left join venta_detalle b
+                               ->     on a.id_producto = b.id_producto;
++-------------+----------+-------+----------+-------+
+| id_producto | name     | price | cantidad | total |
++-------------+----------+-------+----------+-------+
+|           2 | pantalon |   200 |        1 |   200 |
+|           1 | Playera  |   500 |        1 |   500 |
+|           4 | bolsas   |  5000 |        7 | 35000 |
+|        NULL | Bermuda  |  1456 |     NULL |  NULL |
++-------------+----------+-------+----------+-------+
+4 rows in set (0.0005 sec)
+ MySQL  localhost:3306  t2  SQL > select
+                               ->     b.id_producto,
+                               ->     a.name,
+                               ->     a.price,
+                               ->     b.cantidad,
+                               ->     (a.price * b.cantidad) as total
+                               -> from producto a
+                               -> left join venta_detalle b
+                               ->     on a.id_producto = b.id_producto
+                               -> where b.id_producto is null;
++-------------+---------+-------+----------+-------+
+| id_producto | name    | price | cantidad | total |
++-------------+---------+-------+----------+-------+
+|        NULL | Bermuda |  1456 |     NULL |  NULL |
++-------------+---------+-------+----------+-------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306  t2  SQL > select
+                               ->     b.id_producto,
+                               ->     a.name,
+                               ->     a.price,
+                               ->     b.cantidad,
+                               ->     (a.price * b.cantidad) as total
+                               -> from producto a
+                               -> left join venta_detalle b
+                               ->     on a.id_producto = b.id_producto
+                               -> where b.id_producto is not null;
++-------------+----------+-------+----------+-------+
+| id_producto | name     | price | cantidad | total |
++-------------+----------+-------+----------+-------+
+|           1 | Playera  |   500 |        1 |   500 |
+|           2 | pantalon |   200 |        1 |   200 |
+|           4 | bolsas   |  5000 |        7 | 35000 |
++-------------+----------+-------+----------+-------+
+3 rows in set (0.0006 sec)
+ MySQL  localhost:3306  t2  SQL > select
+                               ->     a.nombre,
+                               ->     a.apellidos,
+                               ->     d.name as producto,
+                               ->     c.cantidad,
+                               ->     d.price,
+                               ->     (c.cantidad * d.price) as total
+                               -> from cliente a
+                               -> left join venta b
+                               ->     on a.id_cliente = b.id_cliente
+                               -> left join venta_detalle c
+                               ->     on b.id_venta = c.id_venta
+                               -> left join producto d
+                               ->     on d.id_producto = c.id_producto;
++--------------+-----------+----------+----------+-------+-------+
+| nombre       | apellidos | producto | cantidad | price | total |
++--------------+-----------+----------+----------+-------+-------+
+| nuevo_nombre | bernal    | pantalon |        1 |   200 |   200 |
+| JAVIVI       | LOYAL     | Playera  |        1 |   500 |   500 |
+| nuevo_nombre | bernal    | bolsas   |        7 |  5000 | 35000 |
+| arana        | larana    | NULL     |     NULL |  NULL |  NULL |
+| pedro        | bernal    | NULL     |     NULL |  NULL |  NULL |
+| arana        | larana    | NULL     |     NULL |  NULL |  NULL |
+| xxxx         | xxxx      | NULL     |     NULL |  NULL |  NULL |
++--------------+-----------+----------+----------+-------+-------+
+7 rows in set (0.0015 sec)
+ MySQL  localhost:3306  t2  SQL >

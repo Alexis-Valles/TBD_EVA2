@@ -1,0 +1,153 @@
+MySQL Shell 8.0.46
+
+Copyright (c) 2016, 2026, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \SQL
+Unknown command: '\SQL'
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhst
+Creating a Classic session to 'root@localhst'
+Please provide the password for 'root@localhst':
+MySQL Error 2005 (HY000): Unknown MySQL server host 'localhst' (11001)
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost':
+Save password for 'root@localhost'? [Y]es/[N]o/Ne[v]er (default No):
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 36
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306  SQL > use t2;
+Default schema set to `t2`.
+Fetching global names, object names from `t2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306  t2  SQL > create table carrera (
+                               ->     id_carrera int not null key auto_increment,
+                               ->     name varchar(50)
+                               -> );
+ERROR: 1050 (42S01): Table 'carrera' already exists
+ MySQL  localhost:3306  t2  SQL > create table estudiante (
+                               ->     id_estudiante int not null key auto_increment,
+                               ->     id_carrera int not null,
+                               ->     name varchar(50),
+                               ->     foreign key (id_carrera) references carrera(id_carrera)
+                               ->         on update cascade
+                               ->         on delete restrict
+                               -> );
+ERROR: 1050 (42S01): Table 'estudiante' already exists
+ MySQL  localhost:3306  t2  SQL > insert into carrera (name) values
+                               ->     ('Fundamentos de programacion'),
+                               ->     ('Calculo'),
+                               ->     ('Taller de etica');
+Query OK, 3 rows affected (0.0059 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306  t2  SQL > insert into estudiante (id_carrera, name) values
+                               ->     (1, 'Juan'),
+                               ->     (2, 'Javier'),
+                               ->     (2, 'Arana');
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`t2`.`estudiante`, CONSTRAINT `estudiante_ibfk_1` FOREIGN KEY (`id_carrera`) REFERENCES `carrera` (`id_carrera`) ON UPDATE CASCADE)
+ MySQL  localhost:3306  t2  SQL > select * from carrera;
++------------+-----------------------------+
+| id_carrera | name                        |
++------------+-----------------------------+
+|          2 | DIFERENCIAL                 |
+|          3 | TELECOMUNICACIONES          |
+|         10 | FISICA                      |
+|         12 | Fundamentos de programacion |
+|         13 | Calculo                     |
+|         14 | Taller de etica             |
++------------+-----------------------------+
+6 rows in set (0.0005 sec)
+ MySQL  localhost:3306  t2  SQL > select * from estudiante;
++---------------+------------+-------+
+| id_estudiante | id_carrera | name  |
++---------------+------------+-------+
+|             1 |         10 | Alets |
+|             2 |          2 | Javon |
+|             3 |          2 | Arana |
++---------------+------------+-------+
+3 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > delete from carrera where id_carrera = 2;
+ERROR: 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`t2`.`estudiante`, CONSTRAINT `estudiante_ibfk_1` FOREIGN KEY (`id_carrera`) REFERENCES `carrera` (`id_carrera`) ON UPDATE CASCADE)
+ MySQL  localhost:3306  t2  SQL > update carrera set id_carrera = 20 where id_carrera = 10;
+Query OK, 1 row affected (0.0023 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306  t2  SQL > select * from estudiante;
++---------------+------------+-------+
+| id_estudiante | id_carrera | name  |
++---------------+------------+-------+
+|             1 |         20 | Alets |
+|             2 |          2 | Javon |
+|             3 |          2 | Arana |
++---------------+------------+-------+
+3 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > create table if not exists comida (
+                               ->     id_comida int not null key auto_increment,
+                               ->     name varchar(50) not null
+                               -> );
+Query OK, 0 rows affected, 1 warning (0.0002 sec)
+Note (code 1050): Table 'comida' already exists
+ MySQL  localhost:3306  t2  SQL > insert into comida (name) values
+                               ->     ('Pizza'),
+                               ->     ('Burger'),
+                               ->     ('Boneless');
+ERROR: 1054 (42S22): Unknown column 'name' in 'field list'
+ MySQL  localhost:3306  t2  SQL > select * from comida;
++-----------+-------------+
+| id_comida | nombre      |
++-----------+-------------+
+|         2 | Tacos       |
+|         3 | Hamburguesa |
++-----------+-------------+
+2 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL > drop comida;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'comida' at line 1
+ MySQL  localhost:3306  t2  SQL > drop table comida;
+Query OK, 0 rows affected (0.0079 sec)
+ MySQL  localhost:3306  t2  SQL > create table if not exists comida (
+                               ->     id_comida int not null key auto_increment,
+                               ->     name varchar(50) not null
+                               -> );
+Query OK, 0 rows affected (0.0111 sec)
+ MySQL  localhost:3306  t2  SQL > insert into comida (name) values
+                               ->     ('Pizza'),
+                               ->     ('Burger'),
+                               ->     ('Boneless');
+Query OK, 3 rows affected (0.0031 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306  t2  SQL > create table if not exists cliente_comi (
+                               ->     id_cliente int not null key auto_increment,
+                               ->     name varchar(50) not null,
+                               ->     comida_favorita int,
+                               ->     foreign key (comida_favorita) references comida(id_comida)
+                               ->         on delete set null
+                               ->         on update cascade
+                               -> );
+Query OK, 0 rows affected (0.0248 sec)
+ MySQL  localhost:3306  t2  SQL > insert into cliente_comi (name, comida_favorita) values
+                               ->     ('Javier', 1),
+                               ->     ('Chikis', 2),
+                               ->     ('Aletz', 1),
+                               ->     ('Luis', 3);
+Query OK, 4 rows affected (0.0038 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306  t2  SQL > delete from comida where id_comida = 3;
+Query OK, 1 row affected (0.0022 sec)
+ MySQL  localhost:3306  t2  SQL > select * from cliente_comi;
++------------+--------+-----------------+
+| id_cliente | name   | comida_favorita |
++------------+--------+-----------------+
+|          1 | Javier |               1 |
+|          2 | Chikis |               2 |
+|          3 | Aletz  |               1 |
+|          4 | Luis   |            NULL |
++------------+--------+-----------------+
+4 rows in set (0.0004 sec)
+ MySQL  localhost:3306  t2  SQL >
